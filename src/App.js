@@ -12,6 +12,7 @@ import { setHost, setUser } from "./redux/actions";
 import { BucketList } from "./components/pages/BucketList";
 import { useUser } from "./customHooks/useUser";
 import Home from "./components/pages/Home";
+import PendingPage from "./components/pages/PendingPage";
 
 function App() {
   const dispatch = useDispatch();
@@ -22,7 +23,7 @@ function App() {
         dispatch(setUser(user));
       } else {
         const authId = user.uid;
-        createUser({ authId });
+        // createUser({ authId });
         dispatch(setHost({ authId }));
       }
     });
@@ -36,6 +37,7 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/bucketList" element={<BucketList />} />
+          <Route path="/pendingPage" element={<PendingPage />} />
         </Routes>
       </div>
     </Router>

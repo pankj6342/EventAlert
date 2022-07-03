@@ -9,7 +9,7 @@ const Home = () => {
   const [host, setHost] = useState(isHost);
   const dispatch = useDispatch();
   useEffect(() => {
-    if (currentUser?.uid === `TYSsIOl3GRUzylDJpEegqxfcrdk1`) {
+    if (isHost) {
       setHost(true);
     }
   }, [host]);
@@ -17,7 +17,7 @@ const Home = () => {
     <div>
       <button
         className="fixed bottom-30 right-10 "
-        onClick={(host) => {
+        onClick={() => {
           setHost((host) => !host);
           dispatch(setHost(!isHost));
         }}

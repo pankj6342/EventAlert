@@ -1,11 +1,15 @@
 import * as types from "./actionTypes";
-import { auth } from "../firebase";
+import { auth, db } from "../firebase";
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   signOut,
   updateProfile,
 } from "firebase/auth";
+import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { useUser } from "../customHooks/useUser";
+import { addDoc, collection } from "firebase/firestore";
 
 const registerStart = () => ({
   type: types.REGISTER_START,
@@ -61,7 +65,22 @@ export const updateBucketList = (bucketList) => ({
 //     }
 //   };
 // };
-export const registerInitiate = (email, password, displayName) => {
+const createUser = async (user, isHost) => {
+  try {
+    await addDoc(collection(db, "user"), {
+      interests: [],
+      bucketList: [],
+      authId: user.uid,
+      isHost: isHost || false,
+    });
+    console.log("added success");
+    // setAddSucess(true);
+  } catch (error) {
+    console.log({ addUserError: error.message });
+  }
+};
+
+export const registerInitiate = (email, password, displayName, isHost) => {
   return async function (dispatch) {
     dispatch(registerStart());
     try {
@@ -74,6 +93,7 @@ export const registerInitiate = (email, password, displayName) => {
       console.log("user created successfully: ", userCredentials);
       await updateProfile(user, { displayName });
       dispatch(registerSuccess(user));
+      await createUser(user, isHost);
     } catch (error) {
       dispatch(registerFail(error.message));
       console.log({ signUpError: error });

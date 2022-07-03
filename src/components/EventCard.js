@@ -18,16 +18,19 @@ export const EventCard = ({ details }) => {
     deleteEvent(details.id);
   };
   const addToBucketList = async (eventDetails) => {
+    console.log({ addToBucketList });
     const userRef = collection(db, "user");
     var bucketList;
     const q = query(userRef, where("authId", "==", currentUser.uid));
     const querySnapshot = await getDocs(q);
     querySnapshot.forEach((doc) => {
+      console.log(doc.data());
       bucketList = doc.data().bucketList;
     });
     const newBucketList = [...bucketList, eventDetails];
+    // const newBucketList = ["hello"];
     var dbId = await getdbId(currentUser.uid);
-
+    console.log({ dbId });
     if (dbId) dispatch(updateUser(dbId, { bucketList: newBucketList }));
   };
   const [registered, setRegisted] = useState(false);

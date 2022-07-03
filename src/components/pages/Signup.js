@@ -6,7 +6,7 @@ import { registerInitiate } from "../../redux/actions";
 const Signup = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
+  const [isHost, setIsHost] = useState(false);
   const [state, setState] = useState({
     email: "",
     password: "",
@@ -27,8 +27,8 @@ const Signup = () => {
     if (currentUser) {
       navigate("/");
     }
-  }, []);
-  
+  }, [currentUser]);
+
   const onSubmit = (e) => {
     e.preventDefault();
     if (state.password !== state.confirmPassword) {
@@ -39,10 +39,13 @@ const Signup = () => {
       setValidInput(true);
     }
     if (validInput) {
+      // if (isHost) navigate("/pendingPage");
+      // else {
       console.log(state);
       dispatch(
-        registerInitiate(state.email, state.password, state.displayName)
+        registerInitiate(state.email, state.password, state.displayName, isHost)
       );
+      // }
     }
   };
 
@@ -127,6 +130,7 @@ const Signup = () => {
               //   disabled={state.email === "" || state.password === ""}
               value="Sign Up"
             />
+
             <a
               className="inline-block align-baseline font-bold text-sm text-blue hover:text-blue-darker"
               href="#"
@@ -135,6 +139,16 @@ const Signup = () => {
             </a>
           </div>
         </form>
+        <input
+          className={`${
+            isHost ? `bg-red-500` : `bg-green-500`
+          } mt-4 w-[300px] text-white font-bold py-2 px-4 rounded`}
+          type="submit"
+          onClick={() => {
+            setIsHost(!isHost);
+          }}
+          value={`Registering as as a ${isHost ? `Host` : `Atendee`}`}
+        />
       </div>
     </div>
   );

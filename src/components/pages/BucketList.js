@@ -41,7 +41,7 @@ export const BucketList = () => {
         <div>no items in bucket list</div>
       ) : (
         <div className="flex flex-col space-y-2">
-          {list.map((e, id) => {
+          {list.map((e) => {
             return <BucketCard key={e.id} details={e} />;
           })}
         </div>
